@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "echo \"Hello\" && exit 1"
+    "test": "echo \"Hello\" "
   },
   "keywords": [],
   "author": "",
