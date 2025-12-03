@@ -1,0 +1,57 @@
+pipeline {
+    agent {
+        docker {
+            image 'node:18'
+            args '-u root' // Run as root to allow installing packages if needed
+        }
+    }
+
+    environment {
+        IMAGE_NAME = 'taskify-app'
+        DOCKER_TAG = 'latest'
+    }
+
+    stages {
+        stage('Clone Repo') {
+            steps {
+                git branch: 'main', url: 'https://github.com/Itachijb93/taskify-app.git'
+            }
+        }
+
+        stage('Install & Build React App') {
+            steps {
+                // Ensure you're in the correct directory
+                sh 'ls -la'
+                sh 'npm install'
+                sh 'npm run build'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    // Make sure Dockerfile.react exists at repo root or adjust path
+                    sh 'ls -la'
+                    docker.build("${IMAGE_NAME}", '-f Dockerfile.react .')
+                }
+            }
+        }
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                // Apply Kubernetes manifests from the k8s folder
+                sh 'kubectl apply -f k8s/deployment.yaml'
+                sh 'kubectl apply -f k8s/service.yaml'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Deployment successful!'
+        }
+        failure {
+            echo '❌ Something went wrong. Please check the logs above.'
+        }
+    }
+}
