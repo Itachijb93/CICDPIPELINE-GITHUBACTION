@@ -2,7 +2,7 @@ name: ci pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
     paths:
       - 'taskify-app-folder/**'                  # run only if something here changed
       - '.github/workflows/completeci.yml'
