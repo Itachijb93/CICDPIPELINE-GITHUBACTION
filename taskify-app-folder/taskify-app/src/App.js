@@ -45,6 +45,7 @@ function App() {
   return (
     <div className="container">
       <h1>Taskify - Task Management</h1>
+      <h2>Welcome to Taskify!</h2>
       <div className="task-input">
         <input
           type="text"
